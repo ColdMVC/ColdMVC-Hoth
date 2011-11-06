@@ -5,6 +5,12 @@
 component {
 
 	property applicationName;
+	
+	/**
+	 * @inject coldmvc
+	 */
+	property coldmvc;
+	
 	property logPath;
 	property logPathIsRelative;
 	property email;
@@ -13,11 +19,11 @@ component {
 	public any function init() {
 
 		// create a basic config with sensible defaults
-		config = new hoth.config.HothConfig();
-		config.setApplicationName(coldmvc.cgi.get("server_name"));
-		config.setLogPath(expandPath("/config/../logs/"));
-		config.setLogPathIsRelative(false);
-	    config.setEmailNewExceptions(true);
+		variables.config = new hoth.config.HothConfig();
+		variables.config.setApplicationName(coldmvc.cgi.get("server_name"));
+		variables.config.setLogPath(expandPath("/config/../logs/"));
+		variables.config.setLogPathIsRelative(false);
+	    variables.config.setEmailNewExceptions(true);
 
 		return this;
 
@@ -25,30 +31,30 @@ component {
 
 	public void function setApplicationName(required string applicationName) {
 
-		config.setApplicationName(arguments.applicationName);
+		variables.config.setApplicationName(arguments.applicationName);
 
 	}
 
 	public void function setLogPath(required string logPath) {
 
-		config.setLogPath(arguments.logPath);
+		variables.config.setLogPath(arguments.logPath);
 
 	}
 
 	public void function setLogPathIsRelative(required boolean logPathIsRelative) {
 
-		config.setLogPathIsRelative(arguments.logPathIsRelative);
+		variables.config.setLogPathIsRelative(arguments.logPathIsRelative);
 
 	}
 
 	public void function setEmail(required struct email) {
 
 		if (structKeyExists(arguments.email, "from")) {
-			config.setEmailNewExceptionsFrom(arguments.email.from);
+			variables.config.setEmailNewExceptionsFrom(arguments.email.from);
 		}
 
 		if (structKeyExists(arguments.email, "to")) {
-			config.setEmailNewExceptionsTo(arguments.email.to);
+			variables.config.setEmailNewExceptionsTo(arguments.email.to);
 		}
 
 	}
@@ -69,7 +75,7 @@ component {
 		if (variables.enabled) {
 
 			if (!structKeyExists(variables, "tracker")) {
-				variables.tracker = new hoth.HothTracker(config);
+				variables.tracker = new hoth.HothTracker(variables.config);
 			}
 
 			variables.tracker.track(params.error);
