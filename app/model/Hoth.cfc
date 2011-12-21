@@ -1,16 +1,15 @@
 /**
  * @singleton
- * @accessors true
  */
-component {
+component accessors="true" {
 
 	property applicationName;
-	
+
 	/**
 	 * @inject coldmvc
 	 */
 	property coldmvc;
-	
+
 	property logPath;
 	property logPathIsRelative;
 	property email;
